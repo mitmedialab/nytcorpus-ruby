@@ -1,0 +1,6 @@
+data
+.DS_Store
+._*
+.*.sw[a-z]
+*.un~
+Session.vim

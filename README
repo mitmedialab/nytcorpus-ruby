@@ -1,1 +1,5 @@
 A ruby parser for the New York Times Corpus.
+
+
+Gems:
+ - hpricot
