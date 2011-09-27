@@ -6,7 +6,12 @@ require 'csv'
 
 # which columns to aggregate for value counts
 Cols_To_Write = {
+  :dateline => 2,
+  :descriptors => 3,
   :tc => 4,
+  :locations => 5,
+  :section => 7,
+  :news_desk => 9
 }
 
 csvname = ARGV[0]
