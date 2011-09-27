@@ -5,7 +5,7 @@ require 'ftools'
 class Article
   attr_accessor :publication_date, :bylines, :dateline, 
                 :descriptors, :taxonomic_classifiers, :locations,
-                :page, :section, :column, :news_desk
+                :page, :section, :column, :news_desk, :word_count
 
   def initialize(filename)
     @bylines = []
@@ -35,6 +35,7 @@ class Article
    
       pubdata = (@doc/"pubdata")
       @publication_date = pubdata[0].attributes["date.publication"][0..7] if pubdata.size > 0
+      @word_count = pubdata[0].attributes["item-length"]
 
       news_desk = (@doc/"meta[@name='dsk']")
       @news_desk = news_desk[0].attributes["content"] if news_desk.size > 0
@@ -52,4 +53,23 @@ class Article
       @column = column[0].attributes["content"] if column.size > 0
     end
   end
+  
+  def self.metadata_keys()
+  	[:@publication_date, :@bylines, :@dateline, 
+                :@descriptors, :@taxonomic_classifiers, :@locations,
+                :@page, :@section, :@column, :@news_desk, :@word_count]
+  end
+  
+  def metadata_as_array()
+    metadata = Array.new
+    Article.metadata_keys.each do |attr_name|
+      attr_value = self.instance_variable_get(attr_name)
+      if attr_value.instance_of?(Array)
+      	attr_value = attr_value.join(",")
+      end
+      metadata.push(attr_value)
+    end
+    return metadata
+  end
+  
 end
