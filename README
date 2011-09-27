@@ -3,6 +3,9 @@ A ruby parser for the New York Times Corpus.
 To run the utility which aggregates data from files, the command is:
   ruby utilities/aggregate_data_from_files.rb <DATADIR>
 
+Working with the raw data files is time-consuming, so we have a script that generates a summary CSV.  This CSV contains a row for each article, with a column for each piece of metadata we care about.  To generate a CSV for a set of files:
+  ruby utilties/write_metadata_csv_from_files.rb <DATADIR> <OUTPUT_CSV>
+
 To run a test, the command is:
   ruby -Itest test/unit/article_test.rb
 
