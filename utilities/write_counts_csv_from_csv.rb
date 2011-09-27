@@ -4,7 +4,7 @@ require 'ftools'
 require 'pp'
 require 'csv'
 
-# which columns to aggregate for value counts 
+# which columns to aggregate for value counts
 Cols_To_Write = {
   :dateline => 2,
   :descriptors => 3,
