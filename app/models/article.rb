@@ -26,8 +26,12 @@ class Article
       end
 
       (@doc/"classifier[@type='taxonomic_classifier']").each do |classifer|
-        @taxonomic_classifiers << classifer.inner_html
+        terms = classifer.inner_html.split("/")
+        terms.length.times do |i|
+        	@taxonomic_classifiers << terms[0..i].join("/")
+        end
       end
+      @taxonomic_classifiers.uniq!
     
       (@doc/"classifier[@type='descriptor']").each do |descriptor|
         @descriptors << descriptor.inner_html
@@ -35,7 +39,7 @@ class Article
    
       pubdata = (@doc/"pubdata")
       @publication_date = pubdata[0].attributes["date.publication"][0..7] if pubdata.size > 0
-      @word_count = pubdata[0].attributes["item-length"]
+      @word_count = pubdata[0].attributes["item-length"] if pubdata.size > 0
 
       news_desk = (@doc/"meta[@name='dsk']")
       @news_desk = news_desk[0].attributes["content"] if news_desk.size > 0
@@ -65,7 +69,7 @@ class Article
     Article.metadata_keys.each do |attr_name|
       attr_value = self.instance_variable_get(attr_name)
       if attr_value.instance_of?(Array)
-      	attr_value = attr_value.join(",")
+      	attr_value = attr_value.join("|")
       end
       metadata.push(attr_value)
     end

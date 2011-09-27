@@ -23,9 +23,19 @@ class TestArticle < Test::Unit::TestCase
     assert_equal 1, article.locations.size
     assert_equal "Iraq", article.locations[0]
     #the following test is probably brittle, since XML parsers can't guarantee order
-    assert_equal ["Top/News", "Top/News/World/Countries and Territories/Iraq", 
-                  "Top/News/World", "Top/News/Washington/Campaign 2004/Candidates", 
+    assert_equal ["Top",
+                  "Top/News",
+                  "Top/News/World",
+                  "Top/News/World/Countries and Territories",
+                  "Top/News/World/Countries and Territories/Iraq", 
+                  "Top/News/Washington",
+                  "Top/News/Washington/Campaign 2004",
+                  "Top/News/Washington/Campaign 2004/Candidates", 
                   "Top/News/World/Middle East", 
+                  "Top/Features",
+                  "Top/Features/Travel",
+                  "Top/Features/Travel/Guides",
+                  "Top/Features/Travel/Guides/Destinations",
                   "Top/Features/Travel/Guides/Destinations/Middle East", 
                   "Top/Features/Travel/Guides/Destinations/Middle East/Iraq"], article.taxonomic_classifiers
     assert_equal 1, article.descriptors.size

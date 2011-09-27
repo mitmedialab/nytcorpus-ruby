@@ -6,12 +6,7 @@ require 'csv'
 
 # which columns to aggregate for value counts
 Cols_To_Write = {
-  :dateline => 2,
-  :descriptors => 3,
   :tc => 4,
-  :locations => 5,
-  :section => 7,
-  :news_desk => 9
 }
 
 csvname = ARGV[0]
@@ -42,7 +37,7 @@ def get_counts(all_rows,column_name,column_index,front_page_only)
         
         raw_value = row[column_index]
         if not raw_value.nil?
-          raw_value.split(",").each do |value|
+          raw_value.split("|").each do |value|
             if not counts.has_key?(value)
               counts[value] = {:stories=>0, :words=>0}
             end
