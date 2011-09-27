@@ -45,4 +45,8 @@ puts
 puts "Total Files: #{counter}"
 puts "Total Articles: #{total_articles}"
 puts
-pp article_data
+article_data.each_pair do |key, value|
+  printf "%3d" % (value.to_f/total_articles.to_f*100.to_f).to_i
+  print "%  #{value} : #{key} \n"
+end
+
