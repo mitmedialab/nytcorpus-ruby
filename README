@@ -1,5 +1,10 @@
 A ruby parser for the New York Times Corpus.
 
+To run the utility which aggregates data from files, the command is:
+  ruby utilities/aggregate_data_from_files.rb <DATADIR>
+
+To run a test, the command is:
+  ruby -Itest test/unit/article_test.rb
 
 Gems:
  - hpricot

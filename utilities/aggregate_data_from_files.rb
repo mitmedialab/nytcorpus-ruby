@@ -43,7 +43,7 @@ end
 
 puts
 puts "Total Files: #{counter}"
-puts "Total Articles: #{total_articles}"
+puts "Parsed Articles: #{total_articles}"
 puts
 article_data.each_pair do |key, value|
   printf "%3d" % (value.to_f/total_articles.to_f*100.to_f).to_i
