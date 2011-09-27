@@ -10,9 +10,13 @@ class TestArticle < Test::Unit::TestCase
 
   def teardown
   end
+ 
+  def load_article(filename)
+    Article.new(File.join(ROOT, "test", "fixtures", filename))
+  end
 
   def test_load_article
-    article = Article.new(File.join(ROOT, "test", "fixtures", "bush_iraq_funding.xml"))
+    article = load_article "bush_iraq_funding.xml"
     assert !article.nil?
     assert_equal 1, article.bylines.size
     assert_equal "By DAVID E. SANGER; Thom Shanker contributed reporting from Washington, and Marc Santora from Baghdad.", article.bylines[0]
@@ -32,5 +36,16 @@ class TestArticle < Test::Unit::TestCase
     assert_equal "1", article.page
     assert_equal "1", article.section
     assert_equal "5", article.column
+
+    article = load_article "article_no_fields.xml"
+    assert_equal 0, article.bylines.size
+    assert_equal 0, article.locations.size
+    assert_equal 0, article.descriptors.size
+    assert_nil article.publication_date
+    assert_nil article.news_desk
+    assert_nil article.dateline
+    assert_nil article.page
+    assert_nil article.section
+    assert_nil article.column
   end
 end
