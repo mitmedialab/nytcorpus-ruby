@@ -7,7 +7,7 @@ Working with the raw data files is time-consuming, so we have a script that gene
   ruby utilties/write_metadata_csv_from_files.rb <DATADIR> <OUTPUT_CSV>
 
 Once you have a summary CSV, you run a script to create a whole bunch of CSV that describe the frequency of values in each piece of metadata:
-  ruby utilities/write_counts_csv_from_csv.rb <DATADIR> <OUTPUT_CSV_PREFIX>
+  ruby utilities/write_counts_csv_from_csv.rb <SUMMARY_CSV> <OUTPUT_CSV_PREFIX>
 
 To run a test, the command is:
   ruby -Itest test/unit/article_test.rb
