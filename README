@@ -41,9 +41,10 @@ time.
 
 After that, to generate value frequency CSVs for each piece of metadata we care 
 about, run this script:
-`ruby utilities/batch/write_all_freq_csvs.rb <INPUT_DIR>`
+`ruby utilities/batch/write_all_freq_csvs.rb <INPUT_DIR> <OUTPUT_DIR>`
 Use the directory continaing all your metadata CSV files from the previous 
-script as your input to this one. 
+script as your input to this one. The new value frequency CSVs will be written
+to the output directory.
 
 Tests
 -----
