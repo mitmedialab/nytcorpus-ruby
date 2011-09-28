@@ -4,3 +4,5 @@ data
 .*.sw[a-z]
 *.un~
 Session.vim
+
+.project
