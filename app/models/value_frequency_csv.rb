@@ -19,7 +19,10 @@ class ValueFrequencyCsv
     row_index = 0
     all_rows.each do |row|
       if row_index > 0  # first row has titles
-	@data[row[0]] = {:article=>row[1], :words=>row[2]}
+	attr = row[0].to_s
+	@data[attr] = {:articles=>0, :words=>0}
+	@data[attr][:articles] = row[1].to_i rescue false
+	@data[attr][:words] = row[2].to_i rescue false
       end
       row_index += 1
     end
@@ -29,4 +32,10 @@ class ValueFrequencyCsv
     return @data.length
   end
     
+  def get_matching(regex)
+    @data.delete_if do |attribute, info|
+      attribute.match(/^#{regex}$/) ? false : true
+    end
+  end
+  
 end

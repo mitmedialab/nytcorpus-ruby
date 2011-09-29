@@ -39,4 +39,14 @@ class TestValueFrequencyCsv < Test::Unit::TestCase
     assert_equal csv.attribute_count, 2
   end
 
+  def test_get_by_prefix
+    csv_name = ValueFrequencyCsv.canoncial_filename(1987,2,@attribute)
+    csv_path = File.join(@base_dir,csv_name)
+    csv = ValueFrequencyCsv.new(csv_path)
+    assert_equal csv.attribute_count, 2
+    prefix = "Top/Item2.*"
+    hash = csv.get_matching(prefix)
+    assert_equal hash.length, 1
+  end
+
 end
