@@ -46,6 +46,7 @@ class TestArticle < Test::Unit::TestCase
     assert_equal "1", article.page
     assert_equal "1", article.section
     assert_equal "5", article.column
+    assert_equal "Bush Plan for Iraq Requests More Troops and More Jobs", article.headline
 
     article = load_article "article_no_fields.xml"
     assert_equal 0, article.bylines.size

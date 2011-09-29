@@ -5,7 +5,8 @@ require 'ftools'
 class Article
   attr_accessor :publication_date, :bylines, :dateline, 
                 :descriptors, :taxonomic_classifiers, :locations,
-                :page, :section, :column, :news_desk, :word_count
+                :page, :section, :column, :news_desk, :word_count,
+                :headline, :filename
 
   def initialize(filename)
     @bylines = []
@@ -13,7 +14,9 @@ class Article
     @descriptors = []
     @taxonomic_classifiers = []
 
-    file = File.open(filename) 
+    @filename = filename
+
+    file = File.open(@filename) 
     if file
       @doc = Hpricot::XML(file.read)
 
@@ -55,13 +58,18 @@ class Article
 
       column = (@doc/"meta[@name='print_column']")
       @column = column[0].attributes["content"] if column.size > 0
+      
+      headline = (@doc/"hedline"/"hl1")
+      @headline = headline[0].inner_html if headline.size > 0
+      
     end
   end
   
   def self.metadata_keys()
   	[:@publication_date, :@bylines, :@dateline, 
                 :@descriptors, :@taxonomic_classifiers, :@locations,
-                :@page, :@section, :@column, :@news_desk, :@word_count]
+                :@page, :@section, :@column, :@news_desk, :@word_count,
+                :@headline, :@filename]
   end
   
   def metadata_as_array()
