@@ -60,6 +60,8 @@ dirs_to_process.each do |dir|
   puts
   puts "  done (parsed #{counter} files)"
   puts
+  
+  dirs_processed += 1
 end
 
 puts
