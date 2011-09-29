@@ -28,6 +28,7 @@ puts
 # now process each directory
 
 total_articles = 0
+dirs_processed = 1
 
 dirs_to_process.each do |dir|
 
@@ -38,7 +39,7 @@ dirs_to_process.each do |dir|
   end
 
   counter = 0
-  puts "Parsing from #{dir} to #{csv_file_name}"
+  puts "Parsing from #{dir} to #{csv_file_name} (#{dirs_processed} of #{dirs_to_process.length})"
   print "  0000: "
 
   Dir.glob(File.join(dir, "**", "*.xml")).each do |filename|
