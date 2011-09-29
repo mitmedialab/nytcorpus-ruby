@@ -2,10 +2,7 @@ require 'config/environment'
 require 'csv'
 
 class ValueFrequencyCsv
-  attr_accessor :publication_date, :bylines, :dateline, 
-                :descriptors, :taxonomic_classifiers, :locations,
-                :page, :section, :column, :news_desk, :word_count
-
+  
   def self.canoncial_filename(year,month,attribute)
     month = "0"+month.to_s if month < 10
     return "data_"+year.to_s+"_"+month.to_s+".csv_"+attribute+".csv"
