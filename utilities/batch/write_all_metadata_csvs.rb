@@ -6,7 +6,7 @@ require 'csv'
 
 # This script walks the entire data directory, created a summary csv file
 # for each month.
-# WARNING: this takes a L))))))ONG time
+# WARNING: this takes a LOOOOOOOOONG time
 
 REALLY_PARSE = true   # for debugging
 DATA_DIR = "data/"
