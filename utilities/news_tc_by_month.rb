@@ -16,21 +16,23 @@ attr_values = []
 
 # collect values we care about from all theyear files
 (1987..2007).each do |year|
+  article_counts[year] = Hash.new
+  word_counts[year] = Hash.new
   (1..12).each do |month|
-    article_counts[year] = Hash.new
-    word_counts[year] = Hash.new
-    article_counts[year][month] = Hash.new
-    word_counts[year][month] = Hash.new
     csv_name = ValueFrequencyCsv.canoncial_filename(year,month,attribute)
     csv_path = File.join(base_dir,csv_name)
-    print "  Loading #{csv_path}... "
-    $stdout.flush
-    csv = ValueFrequencyCsv.new(csv_path)
-    print "done #{csv.attribute_count} attributes\n"
-    csv.get_matching(prefix).each_pair do |attr, info|
-      attr_values << attr if not attr_values.include?(attr)
-      article_counts[year][month][attr] = info[:articles]
-      word_counts[year][month][attr] = info[:words]
+    if File.exists?(csv_path)
+      article_counts[year][month] = Hash.new
+      word_counts[year][month] = Hash.new
+      print "  Loading #{csv_path}... "
+      $stdout.flush
+      csv = ValueFrequencyCsv.new(csv_path)
+      print "done #{csv.attribute_count} attributes\n"
+      csv.get_matching(prefix).each_pair do |attr, info|
+        attr_values << attr if not attr_values.include?(attr)
+        article_counts[year][month][attr] = info[:articles]
+        word_counts[year][month][attr] = info[:words]
+      end
     end
   end
 end
