@@ -53,6 +53,20 @@ Use the directory continaing all your metadata CSV files from the previous
 script as your input to this one. The new value frequency CSVs will be written
 to the output directory.
 
+Querying
+-------
+
+Once you've generated all the batch files, you can query the data interactively
+via the IRB.  You can do things like this:
+
+`
+require 'app/models/article_set'
+set = ArticleSet.from_csv_file('analysis/rev2/metadata-csv/data_2003_05.csv')
+notes = set.get_matching(:@taxonomic_classifiers, "Top/News/Editors' Notes")
+notes.to_csv("2003_05_notes.csv")
+`
+
+
 Tests
 -----
 

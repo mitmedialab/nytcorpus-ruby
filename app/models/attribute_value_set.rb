@@ -48,4 +48,33 @@ class AttributeValueSet
     return AttributeValueSet.from_data(newset)
   end
   
+  def self.aggregate_over_timespan(base_dir, year_range, month_range, attribute, regex)
+    article_counts = Hash.new
+    word_counts = Hash.new
+    attr_values = []
+    # collect values we care about from all the year files
+    year_range.each do |year|
+      article_counts[year] = Hash.new
+      word_counts[year] = Hash.new
+      month_range.each do |month|
+        csv_name = AttributeValueSet.csv_filename(year,month,attribute)
+        csv_path = File.join(base_dir,csv_name)
+        if File.exists?(csv_path)
+            article_counts[year][month] = Hash.new
+            word_counts[year][month] = Hash.new
+            print "  Loading #{csv_path}... "
+            $stdout.flush
+            csv = AttributeValueSet.from_csv_file(csv_path)
+            print "done #{csv.value_count} values\n"
+            csv.filter(regex).data.each_pair do |attr, info|
+              attr_values << attr if not attr_values.include?(attr)
+              article_counts[year][month][attr] = info[:articles]
+              word_counts[year][month][attr] = info[:words]
+            end
+        end
+      end
+    end
+    return article_counts, word_counts, attr_values.sort!
+  end
+    
 end

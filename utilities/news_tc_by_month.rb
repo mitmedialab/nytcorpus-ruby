@@ -5,37 +5,13 @@ require 'pp'
 base_dir = ARGV[0]
 output_dir = ARGV[1]
 
-attribute = "tc"
-prefix = "Top/News/[^/]*"
+attribute = "tc"      # what attribute to 
+regex = "Top/News/[^/]*"
 
 print "Aggregating #{attribute} from #{base_dir} \n"
 
-article_counts = Hash.new
-word_counts = Hash.new
-attr_values = []
-
-# collect values we care about from all theyear files
-(1987..2007).each do |year|
-  article_counts[year] = Hash.new
-  word_counts[year] = Hash.new
-  (1..12).each do |month|
-    csv_name = AttributeValueSet.csv_filename(year,month,attribute)
-    csv_path = File.join(base_dir,csv_name)
-    if File.exists?(csv_path)
-      article_counts[year][month] = Hash.new
-      word_counts[year][month] = Hash.new
-      print "  Loading #{csv_path}... "
-      $stdout.flush
-      csv = AttributeValueSet.from_csv_file(csv_path)
-      print "done #{csv.value_count} values\n"
-      csv.filter(prefix).data.each_pair do |attr, info|
-        attr_values << attr if not attr_values.include?(attr)
-        article_counts[year][month][attr] = info[:articles]
-        word_counts[year][month][attr] = info[:words]
-      end
-    end
-  end
-end
+article_counts, word_counts, attr_values =
+  AttributeValueSet.aggregate_over_timespan( base_dir, (1987..2007), (1..12), attribute, regex)
 
 # write a Hash of counts out to a csv file
 def write_csv(attr_values, counts, filename)
