@@ -30,5 +30,16 @@ class TestArticleSet< Test::Unit::TestCase
     dataset = ArticleSet.from_csv_file(csv_path)
     assert_equal dataset.article_count, 1362
   end
+  
+  def test_get_matching
+    csv_name = ArticleSet.csv_filename(1987,6)
+    csv_path = File.join(@base_dir,csv_name)
+    dataset = ArticleSet.from_csv_file(csv_path)
+    new_dataset = dataset.get_matching(:@taxonomic_classifiers,".*World.*")
+    assert_equal 169, new_dataset.article_count
+    assert_equal 1362, dataset.article_count
+    new_dataset = dataset.get_matching(:@taxonomic_classifiers,"DUMMY.*")
+    assert_equal 0, new_dataset.article_count
+  end
 
 end

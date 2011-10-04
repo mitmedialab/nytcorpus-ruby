@@ -15,6 +15,14 @@ class TestArticle < Test::Unit::TestCase
     Article.from_xml_file(File.join(ROOT, "test", "fixtures", filename))
   end
 
+  def test_has_attribute_value
+    article = load_article "bush_iraq_funding.xml"
+    assert_equal true, article.has_attribute_value?(:@taxonomic_classifiers,"Top/News/World")
+    assert_equal true, article.has_attribute_value?(:@taxonomic_classifiers,"Top.*")
+    assert_equal false, article.has_attribute_value?(:@taxonomic_classifiers,"Top/News/W")
+    assert_equal true, article.has_attribute_value?(:@page, "1")
+  end
+
   def test_load_article
     article = load_article "bush_iraq_funding.xml"
     assert !article.nil?
@@ -59,4 +67,5 @@ class TestArticle < Test::Unit::TestCase
     assert_nil article.section
     assert_nil article.column
   end
+  
 end

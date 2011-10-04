@@ -4,7 +4,7 @@ require 'app/models/Article'
 
 class ArticleSet
 
-  attr_accessor :articles
+  attr_accessor :articles, :filename
 
   def initialize
     @articles = Array.new
@@ -15,10 +15,21 @@ class ArticleSet
     return "data_"+year.to_s+"_"+month.to_s+".csv"
   end
 
+  def self.from_array(array_of_articles)
+    set = ArticleSet.new
+    set.articles = array_of_articles
+    return set
+  end
+  
+  def from_file?
+    return @filename != nil
+  end
+  
   def self.from_csv_file(filename)
     set = ArticleSet.new
+    set.filename = filename
     # load into memory
-    all_rows = CSV.read(filename)
+    all_rows = CSV.read(set.filename)
     row_index = 0
     all_rows.each do |row|
       if row_index > 0  # first row has titles
@@ -29,14 +40,23 @@ class ArticleSet
     return set
   end
   
+  def to_csv(filename)
+    csv_file = CSV.open(filename, "wb")
+    csv_file << Article.metadata_keys
+    articles.each do |article|
+      csv_file << article.metadata_as_array
+    end
+  end
+  
   def article_count
     return @articles.length
   end
-    
-  def get_matching(regex)
-    @data.delete_if do |attribute, info|
-      attribute.match(/^#{regex}$/) ? false : true
+
+  def get_matching(article_attribute_name, regex)
+    valid_articles = @articles.reject do |article|
+      article.has_attribute_value?(article_attribute_name, regex) ? false : true
     end
+    return ArticleSet.from_array(valid_articles)
   end
   
 end

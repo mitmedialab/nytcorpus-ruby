@@ -20,7 +20,7 @@ class Article
     a.bylines = row[1]
     a.dateline = row[2]
     a.descriptors = row[3]
-    a.taxonomic_classifiers = row[4]
+    a.taxonomic_classifiers = row[4].split("|")
     a.locations = row[5]
     a.page = row[6]
     a.section = row[7]
@@ -37,6 +37,18 @@ class Article
                 :@descriptors, :@taxonomic_classifiers, :@locations,
                 :@page, :@section, :@column, :@news_desk, :@word_count,
                 :@headline, :@filename]
+  end
+  
+  def has_attribute_value?(attr_name, regex)
+    attr_value = self.instance_variable_get(attr_name)
+    if attr_value.instance_of?(Array)
+      attr_value.each do |attr_item_value|
+	return true if attr_item_value.match(/^#{regex}$/)
+      end
+      return false
+    else
+      return attr_value.to_s.match(/^#{regex}$/) ? true : false
+    end
   end
   
   def metadata_as_array()

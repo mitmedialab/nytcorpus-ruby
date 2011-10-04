@@ -42,7 +42,7 @@ class AttributeValueSet
   end
     
   def filter(regex)
-    newset = @data.delete_if do |attribute, info|
+    newset = @data.reject do |attribute, info|
       attribute.match(/^#{regex}$/) ? false : true
     end
     return AttributeValueSet.from_data(newset)
