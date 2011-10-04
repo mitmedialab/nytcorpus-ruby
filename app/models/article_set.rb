@@ -33,7 +33,7 @@ class ArticleSet
     row_index = 0
     all_rows.each do |row|
       if row_index > 0  # first row has titles
-	set.articles << Article.from_metadata_csv_row(row)
+			  set.articles << Article.from_metadata_csv_row(row)
       end
       row_index += 1
     end
