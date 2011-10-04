@@ -6,7 +6,7 @@ base_dir = ARGV[0]
 output_dir = ARGV[1]
 
 attribute = "tc"      # what attribute to 
-regex = "Top/News/[^/]*"
+regex = "Top/News/?[^/]*"
 
 print "Aggregating #{attribute} from #{base_dir} \n"
 
@@ -33,9 +33,6 @@ def write_csv(attr_values, counts, filename)
   end
   print " done\n\n"
 end
-
-# alphabetical
-attr_values.sort!
 
 # write out the csv of counts for each month
 write_csv(attr_values, article_counts, File.join(output_dir,"counts_"+attribute+"_articles.csv"))
