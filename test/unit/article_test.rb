@@ -12,7 +12,7 @@ class TestArticle < Test::Unit::TestCase
   end
  
   def load_article(filename)
-    Article.new(File.join(ROOT, "test", "fixtures", filename))
+    Article.from_xml_file(File.join(ROOT, "test", "fixtures", filename))
   end
 
   def test_load_article

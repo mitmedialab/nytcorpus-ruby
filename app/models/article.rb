@@ -8,7 +8,51 @@ class Article
                 :page, :section, :column, :news_desk, :word_count,
                 :headline, :filename
 
-  def initialize(filename)
+  def self.from_xml_file(filename)
+    a = Article.new
+    a.load_from_xml_file(filename)
+    return a
+  end
+
+  def self.from_metadata_csv_row(row)
+    a = Article.new
+    a.publication_date = row[0]
+    a.bylines = row[1]
+    a.dateline = row[2]
+    a.descriptors = row[3]
+    a.taxonomic_classifiers = row[4]
+    a.locations = row[5]
+    a.page = row[6]
+    a.section = row[7]
+    a.column = row[8]
+    a.news_desk = row[9]
+    a.word_count = row[10]
+    a.headline = row[11]
+    a.filename = row[12]
+    return a
+  end
+
+  def self.metadata_keys()
+  	[:@publication_date, :@bylines, :@dateline, 
+                :@descriptors, :@taxonomic_classifiers, :@locations,
+                :@page, :@section, :@column, :@news_desk, :@word_count,
+                :@headline, :@filename]
+  end
+  
+  def metadata_as_array()
+    metadata = Array.new
+    Article.metadata_keys.each do |attr_name|
+      attr_value = self.instance_variable_get(attr_name)
+      if attr_value.instance_of?(Array)
+      	attr_value = attr_value.join("|")
+      end
+      metadata.push(attr_value)
+    end
+    return metadata
+  end
+  
+  def load_from_xml_file(filename)
+    
     @bylines = []
     @locations = []
     @descriptors = []
@@ -21,23 +65,23 @@ class Article
       @doc = Hpricot::XML(file.read)
 
       (@doc/'byline').each do |byline|
-        @bylines << byline.inner_html
+	@bylines << byline.inner_html
       end
 
       (@doc/'location').each do |location|
-        @locations << location.inner_html
+	@locations << location.inner_html
       end
 
       (@doc/"classifier[@type='taxonomic_classifier']").each do |classifer|
-        terms = classifer.inner_html.split("/")
-        terms.length.times do |i|
-        	@taxonomic_classifiers << terms[0..i].join("/")
-        end
+	terms = classifer.inner_html.split("/")
+	terms.length.times do |i|
+		@taxonomic_classifiers << terms[0..i].join("/")
+	end
       end
       @taxonomic_classifiers.uniq!
     
       (@doc/"classifier[@type='descriptor']").each do |descriptor|
-        @descriptors << descriptor.inner_html
+	@descriptors << descriptor.inner_html
       end
    
       pubdata = (@doc/"pubdata")
@@ -63,25 +107,6 @@ class Article
       @headline = headline[0].inner_html if headline.size > 0
       
     end
-  end
-  
-  def self.metadata_keys()
-  	[:@publication_date, :@bylines, :@dateline, 
-                :@descriptors, :@taxonomic_classifiers, :@locations,
-                :@page, :@section, :@column, :@news_desk, :@word_count,
-                :@headline, :@filename]
-  end
-  
-  def metadata_as_array()
-    metadata = Array.new
-    Article.metadata_keys.each do |attr_name|
-      attr_value = self.instance_variable_get(attr_name)
-      if attr_value.instance_of?(Array)
-      	attr_value = attr_value.join("|")
-      end
-      metadata.push(attr_value)
-    end
-    return metadata
   end
   
 end
