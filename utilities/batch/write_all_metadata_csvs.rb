@@ -45,7 +45,7 @@ dirs_to_process.each do |dir|
   Dir.glob(File.join(dir, "**", "*.xml")).each do |filename|
     if filename != "." and filename != ".."
       if REALLY_PARSE 
-        article = Article.new(filename)
+        article = Article.from_xml_file(filename)
         if article 
           total_articles += 1
           csv_file << article.metadata_as_array
