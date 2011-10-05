@@ -42,4 +42,14 @@ class TestArticleSet< Test::Unit::TestCase
     assert_equal 0, new_dataset.article_count
   end
 
+  def test_filter_unique_articles
+    csv_name = ArticleSet.csv_filename(1920, 01)
+    csv_path = File.join(File.join(@base_dir), csv_name)
+    dataset = ArticleSet.from_csv_file(csv_path)
+    assert_equal 4, dataset.articles.size
+    uniques = dataset.filter_unique_articles
+    assert_equal 2, uniques.size
+    dataset.filter_unique_articles!
+    assert_equal 2, dataset.articles.size
+  end
 end

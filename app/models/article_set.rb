@@ -58,5 +58,29 @@ class ArticleSet
     end
     return ArticleSet.from_array(valid_articles)
   end
+
+  def filter_unique_articles()
+    @articles.sort!{|article_a, article_b|
+      if(article_a.nil? or article_b.nil? or
+         article_a.headline.nil? or article_b.headline.nil?)
+        0
+      else
+        article_a.headline <=> article_b.headline
+      end
+    }
+
+    unique_articles = []
+    unique_articles << @articles[0]
+    @articles.each do |article|
+      if !article.headline.nil? and !(article.headline == unique_articles.last.headline)
+        unique_articles << article 
+      end
+    end
+    unique_articles
+  end
+  
+  def filter_unique_articles!()
+    @articles = filter_unique_articles
+  end
   
 end
