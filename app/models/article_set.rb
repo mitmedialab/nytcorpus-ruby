@@ -53,9 +53,15 @@ class ArticleSet
   end
 
   def get_matching(article_attribute_name, regex)
-    valid_articles = @articles.reject do |article|
-      article.has_attribute_value?(article_attribute_name, regex) ? false : true
-    end
+		accept { |article|
+			article.has_attribute_value?(article_attribute_name, regex)
+		}
+  end
+  
+  def accept(&filter_block)
+		valid_articles = @articles.reject do |article|
+      !filter_block.call(article)	# return true to keep it
+		end
     return ArticleSet.from_array(valid_articles)
   end
 
@@ -81,6 +87,44 @@ class ArticleSet
   
   def filter_unique_articles!()
     @articles = filter_unique_articles
+  end
+  
+  def self.aggregate_over_timespan(base_dir, year_range, month_range, &article_filter_block)
+    article_counts = Hash.new
+    word_counts = Hash.new
+    year_range.each do |year|
+      article_counts[year] = Hash.new
+      word_counts[year] = Hash.new
+      month_range.each do |month|
+        csv_name = ArticleSet.csv_filename(year,month)
+        csv_path = File.join(base_dir,csv_name)
+        if File.exists?(csv_path)
+            article_counts[year][month] = Hash.new
+            word_counts[year][month] = Hash.new
+            puts "  Processing #{csv_path}"
+            set = ArticleSet.from_csv_file(csv_path)
+            
+            # this doesn't work right :-(
+            #set.accept {article_filter_block}
+
+						# HACK
+            filtered_articles = set.articles.reject do |article|
+							!article_filter_block.call(article)	# return true to keep it
+						end
+						filtered_set = ArticleSet.from_array(filtered_articles)
+            
+						month_article_count = 0
+						month_word_count = 0
+            filtered_set.articles.each do |article|
+							month_article_count += 1
+							month_word_count += article.word_count.to_i
+            end
+            article_counts[year][month] = month_article_count
+            word_counts[year][month] = month_word_count
+        end
+      end
+    end
+    return article_counts, word_counts
   end
   
 end
