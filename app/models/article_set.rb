@@ -1,6 +1,6 @@
 require 'config/environment'
 require 'csv'
-require 'app/models/Article'
+require 'app/models/article'
 
 class ArticleSet
 
