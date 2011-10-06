@@ -5,6 +5,11 @@ require 'pp'
 base_dir = ARGV[0]
 output_dir = ARGV[1]
 
+# Write a big CSV table indicating how many articles from each month were
+# included a specific taxonomy classifier term.  Do the same for the word
+# count in those articles.  Change the regex variable to count something
+# different.
+
 attribute = "tc"      # what attribute to 
 regex = "Top/News/?[^/]*"
 
