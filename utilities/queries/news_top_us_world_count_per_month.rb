@@ -34,7 +34,7 @@ puts "Aggregating US, World, Front Page"
 puts "  from #{base_dir} to #{output_dir}"
 
 article_counts, word_counts = 
-  ArticleSet.aggregate_over_timespan( base_dir, (1987..1987), (1..2)) { |article|
+  ArticleSet.aggregate_over_timespan( base_dir, (1987..2007), (1..12)) { |article|
     {
       :us => article.classified_as_united_states?,
       :world => article.classified_as_world?,
