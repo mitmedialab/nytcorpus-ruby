@@ -34,18 +34,19 @@ puts "Aggregating US, World, Front Page"
 puts "  from #{base_dir} to #{output_dir}"
 
 article_counts, word_counts = 
-  ArticleSet.aggregate_over_timespan( base_dir, (1987..2007), (1..12)) { |article|
+  ArticleSet.aggregate_over_timespan( base_dir, (1987..1987), (1..2)) { |article|
     {
       :us => article.classified_as_united_states?,
       :world => article.classified_as_world?,
-      :font_page => article.front_page?
+      :us_front_page => (article.front_page? && article.classified_as_united_states?),
+      :world_front_page => (article.front_page? && article.classified_as_world?)
     }
   }
 
-write_csv([:us,:world, :front_page], article_counts,
+write_csv([:us,:world, :us_front_page, :world_front_page], article_counts,
           File.join(output_dir,"news_us_v_world_article_count_by_month.csv"))
 
-write_csv([:us,:world, :front_page], word_counts,
+write_csv([:us,:world, :us_front_page, :world_front_page], word_counts,
           File.join(output_dir,"news_us_v_world_world_count_by_month.csv"))
 
 
