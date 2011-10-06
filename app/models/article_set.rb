@@ -104,23 +104,20 @@ class ArticleSet
             puts "  Processing #{csv_path}"
             set = ArticleSet.from_csv_file(csv_path)
             
-            # this doesn't work right :-(
-            #set.accept {article_filter_block}
-
-						# HACK
-            filtered_articles = set.articles.reject do |article|
-							!article_filter_block.call(article)	# return true to keep it
+						month_article_counts = {}
+						month_word_counts = {}
+						set.articles.each do |article|
+							flags = article_filter_block.call(article)	# results a hash of bools
+							flags.each_pair do |key, passes|
+								month_article_counts[key] = 0 if !month_article_counts.has_key?(key)
+								month_article_counts[key] += 1 if passes
+								month_word_counts[key] = 0 if !month_word_counts.has_key?(key)
+								month_word_counts[key] += article.word_count.to_i if passes
+							end
 						end
-						filtered_set = ArticleSet.from_array(filtered_articles)
             
-						month_article_count = 0
-						month_word_count = 0
-            filtered_set.articles.each do |article|
-							month_article_count += 1
-							month_word_count += article.word_count.to_i
-            end
-            article_counts[year][month] = month_article_count
-            word_counts[year][month] = month_word_count
+            article_counts[year][month] = month_article_counts
+            word_counts[year][month] = month_word_counts
         end
       end
     end
