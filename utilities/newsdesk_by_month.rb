@@ -5,6 +5,9 @@ require 'pp'
 base_dir = ARGV[0]
 output_dir = ARGV[1]
 
+# Write a big CSV table indicating how many articles from each month were
+# from each newsdesk.  Do the same for the word count in those articles.
+
 attribute = "news_desk"      # what attribute to 
 regex = ".*"
 
