@@ -83,6 +83,10 @@ class Article
     has_attribute_value?(tc_attribute , "Top/News/U\.S\.")
   end
   
+  def front_page?
+    (@section=="A") && (@page.to_i==1)
+  end
+  
   def load_from_xml_file(filename)
     
     @bylines = []

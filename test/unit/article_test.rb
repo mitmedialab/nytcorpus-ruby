@@ -15,6 +15,13 @@ class TestArticle < Test::Unit::TestCase
     Article.from_xml_file(File.join(ROOT, "test", "fixtures", filename))
   end
 
+  def test_front_page
+    article = load_article "fake_article_classified_us_1.xml"
+    assert_equal true, article.front_page?
+    article = load_article "fake_article_classified_us_2.xml"
+    assert_equal false, article.front_page?
+  end
+
   def test_us_world
     article = load_article "bush_iraq_funding.xml"
     assert_equal false, article.classified_as_united_states?
