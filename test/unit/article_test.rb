@@ -15,12 +15,27 @@ class TestArticle < Test::Unit::TestCase
     Article.from_xml_file(File.join(ROOT, "test", "fixtures", filename))
   end
 
-  def test_has_attribute_value
+  def test_us_world
+    article = load_article "bush_iraq_funding.xml"
+    assert_equal false, article.classified_as_united_states?
+    assert_equal true, article.classified_as_world?
+    article = load_article "fake_article_classified_us_1.xml"
+    assert_equal false, article.classified_as_united_states?
+    assert_equal false, article.classified_as_world?
+    article = load_article "fake_article_classified_us_2.xml"
+    assert_equal false, article.classified_as_united_states?
+    assert_equal true, article.classified_as_world?
+  end
+
+  def test_count_has_attribute_values
     article = load_article "bush_iraq_funding.xml"
     assert_equal true, article.has_attribute_value?(:@taxonomic_classifiers,"Top/News/World")
     assert_equal true, article.has_attribute_value?(:@taxonomic_classifiers,"Top.*")
+    assert_equal 4, article.count_attribute_values(:@taxonomic_classifiers,"Top/News/World/?.*")
     assert_equal false, article.has_attribute_value?(:@taxonomic_classifiers,"Top/News/W")
+    assert_equal 0, article.count_attribute_values(:@taxonomic_classifiers,"Top/News/W")
     assert_equal true, article.has_attribute_value?(:@page, "1")
+    assert_equal 2, article.count_attribute_values(:@taxonomic_classifiers,"Top/News/Washington/Campaign 2004.*")
   end
 
   def test_load_article

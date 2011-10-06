@@ -40,15 +40,20 @@ class Article
   end
   
   def has_attribute_value?(attr_name, regex)
+    count_attribute_values(attr_name, regex) > 0
+  end
+  
+  def count_attribute_values(attr_name, regex)
+    matches = 0
     attr_value = self.instance_variable_get(attr_name)
     if attr_value.instance_of?(Array)
       attr_value.each do |attr_item_value|
-	return true if attr_item_value.match(/^#{regex}$/)
+        matches += 1 if attr_item_value.match(/^#{regex}$/)
       end
-      return false
     else
-      return attr_value.to_s.match(/^#{regex}$/) ? true : false
+      matches += 1 if attr_value.to_s.match(/^#{regex}$/)
     end
+    matches
   end
   
   def metadata_as_array()
@@ -61,6 +66,21 @@ class Article
       metadata.push(attr_value)
     end
     return metadata
+  end
+  
+  # Special logic to handle the "Top/News/World/Countries and Territories/United States" tag
+  def classified_as_world?
+    tc_attribute = :@taxonomic_classifiers
+    is_world = has_attribute_value?(tc_attribute , "Top/News/World")
+    is_world_us = has_attribute_value?(tc_attribute, "Top/News/World/Countries and Territories/United States")
+    world_countries_count = count_attribute_values(tc_attribute, "Top/News/World/Countries and Territories/.*")
+    return false if not is_world
+    (!is_world_us) || (is_world_us && world_countries_count>1)
+  end
+  
+  def classified_as_united_states?
+    tc_attribute = :@taxonomic_classifiers
+    has_attribute_value?(tc_attribute , "Top/News/U\.S\.")
   end
   
   def load_from_xml_file(filename)
@@ -77,23 +97,25 @@ class Article
       @doc = Hpricot::XML(file.read)
 
       (@doc/'byline').each do |byline|
-	@bylines << byline.inner_html
+        @bylines << byline.inner_html
       end
 
       (@doc/'location').each do |location|
-	@locations << location.inner_html
+        @locations << location.inner_html
       end
 
       (@doc/"classifier[@type='taxonomic_classifier']").each do |classifer|
-	terms = classifer.inner_html.split("/")
-	terms.length.times do |i|
-		@taxonomic_classifiers << terms[0..i].join("/")
-	end
+        terms = classifer.inner_html.split("/")
+        terms.length.times do |i|
+          @taxonomic_classifiers << terms[0..i].join("/")
+        end
+        
       end
+    
       @taxonomic_classifiers.uniq!
     
       (@doc/"classifier[@type='descriptor']").each do |descriptor|
-	@descriptors << descriptor.inner_html
+        @descriptors << descriptor.inner_html
       end
    
       pubdata = (@doc/"pubdata")
