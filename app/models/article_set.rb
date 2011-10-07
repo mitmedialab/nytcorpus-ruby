@@ -65,6 +65,13 @@ class ArticleSet
     return ArticleSet.from_array(valid_articles)
   end
 
+	def accept!(&filter_block)
+		@articles = @articles.reject do |article|
+      !filter_block.call(article)	# return true to keep it
+		end
+		self
+	end
+
   def filter_unique_articles()
     @articles.sort!{|article_a, article_b|
       if(article_a.nil? or article_b.nil? or
