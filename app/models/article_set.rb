@@ -49,9 +49,10 @@ class ArticleSet
   end
   
   def to_sql_insert_file(filename,table_name)
-    sql_file = File.open(local_filename, 'w')
+    sql_file = File.open(filename, 'w')
     @articles.each do |article|
-      sql_file.write(article.as_mysql_insert(table_name)+"\n")
+      sql_file.write(article.as_mysql_insert(table_name))
+      sql_file.write("\n")
     end
     sql_file.close
   end

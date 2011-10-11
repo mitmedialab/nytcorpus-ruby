@@ -16,19 +16,19 @@ class Article
 
   def self.from_metadata_csv_row(row)
     a = Article.new
-    a.publication_date = row[0]
-    a.bylines = row[1]
-    a.dateline = row[2]
-    a.descriptors = row[3]
-    a.taxonomic_classifiers = row[4].split("|")
-    a.locations = row[5]
-    a.page = row[6]
-    a.section = row[7]
-    a.column = row[8]
-    a.news_desk = row[9]
-    a.word_count = row[10]
-    a.headline = row[11]
-    a.filename = row[12]
+    a.publication_date = row[0].to_s
+    a.bylines = row[1].to_s
+    a.dateline = row[2].to_s
+    a.descriptors = row[3].to_s
+    a.taxonomic_classifiers = row[4].to_s.split("|")
+    a.locations = row[5].to_s
+    a.page = row[6].to_s
+    a.section = row[7].to_s
+    a.column = row[8].to_s
+    a.news_desk = row[9].to_s
+    a.word_count = row[10].to_s
+    a.headline = row[11].to_s
+    a.filename = row[12].to_s
     return a
   end
 
@@ -47,9 +47,9 @@ class Article
   	"INSERT INTO `#{table_name}` "+
   		"(`publication_date`, `byline`, `dateline`, `descriptors`, `taxonomic_classifiers`, "+
   		"`locations`, `page`, `section`, `news_column`, `news_desk`, `word_count`, `headline`, `filename`) " +
-  		"VALUES ("+@publication_date+", "+@bylines+", "+@dateline+", "+@descriptors.join("|")+", "+
-  		@taxonomic_classifiers.join("|")+", "+@locations.join("|")+", "+@page+", "+@section+", "+
-  		@column+", "+@news_desk+", "+@word_count+", "+@headline+", "+@filename+")"
+  		"VALUES ("+@publication_date+", \""+@bylines+"\", \""+@dateline+"\", \""+@descriptors+"\", \""+
+  		@taxonomic_classifiers.join("|")+"\", \""+@locations+"\", \""+@page+"\", \""+@section+"\", \""+
+  		@column+"\", \""+@news_desk+"\", "+@word_count+", \""+@headline+"\", \""+@filename+"\"); "
   end
   
   def count_attribute_values(attr_name, regex)

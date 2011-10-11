@@ -16,3 +16,4 @@ output_file = ARGV[2]
 
 set = ArticleSet.from_csv_file(input_file)
 set.to_sql_insert_file(output_file, table_name)
+
