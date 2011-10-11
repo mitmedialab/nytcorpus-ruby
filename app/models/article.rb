@@ -43,6 +43,15 @@ class Article
     count_attribute_values(attr_name, regex) > 0
   end
   
+  def as_mysql_insert(table_name)
+  	"INSERT INTO `#{table_name}` "+
+  		"(`publication_date`, `byline`, `dateline`, `descriptors`, `taxonomic_classifiers`, "+
+  		"`locations`, `page`, `section`, `news_column`, `news_desk`, `word_count`, `headline`, `filename`) " +
+  		"VALUES ("+@publication_date+", "+@bylines+", "+@dateline+", "+@descriptors.join("|")+", "+
+  		@taxonomic_classifiers.join("|")+", "+@locations.join("|")+", "+@page+", "+@section+", "+
+  		@column+", "+@news_desk+", "+@word_count+", "+@headline+", "+@filename+")"
+  end
+  
   def count_attribute_values(attr_name, regex)
     matches = 0
     attr_value = self.instance_variable_get(attr_name)

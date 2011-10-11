@@ -48,6 +48,14 @@ class ArticleSet
     end
   end
   
+  def to_sql_insert_file(filename,table_name)
+    sql_file = File.open(local_filename, 'w')
+    @articles.each do |article|
+      sql_file.write(article.as_mysql_insert(table_name)+"\n")
+    end
+    sql_file.close
+  end
+  
   def article_count
     return @articles.length
   end
