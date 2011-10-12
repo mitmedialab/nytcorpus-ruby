@@ -43,13 +43,14 @@ class Article
     count_attribute_values(attr_name, regex) > 0
   end
   
+  #TODO: write a good test fixture for this
   def as_mysql_insert(table_name)
   	"INSERT INTO `#{table_name}` "+
   		"(`publication_date`, `byline`, `dateline`, `descriptors`, `taxonomic_classifiers`, "+
   		"`locations`, `page`, `section`, `news_column`, `news_desk`, `word_count`, `headline`, `filename`) " +
-  		"VALUES ("+@publication_date+", \""+@bylines+"\", \""+@dateline+"\", \""+@descriptors+"\", \""+
-  		@taxonomic_classifiers.join("|")+"\", \""+@locations+"\", \""+@page+"\", \""+@section+"\", \""+
-  		@column+"\", \""+@news_desk+"\", "+@word_count+", \""+@headline+"\", \""+@filename+"\"); "
+  		"VALUES (\""+@publication_date[0..3]+"-"+publication_date[4..5]+"-"+publication_date[6..7]+" 00:00:00\", \""+@bylines.gsub('"','\"')+"\", \""+@dateline.gsub('"','\"')+"\", \""+@descriptors.gsub('"','\"')+"\", \""+
+  		@taxonomic_classifiers.join("|").gsub('"','\"')+"\", \""+@locations.gsub('"','\"')+"\", \""+@page.gsub('"','\"')+"\", \""+@section.gsub('"','\"')+"\", \""+
+  		@column.gsub('"','\"')+"\", \""+@news_desk.gsub('"','\"')+"\", "+@word_count+", \""+@headline.gsub('"','\"')+"\", \""+@filename.gsub('"','\"')+"\"); "
   end
   
   def count_attribute_values(attr_name, regex)

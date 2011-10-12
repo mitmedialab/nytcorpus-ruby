@@ -4,7 +4,7 @@ require 'app/models/article'
 
 class ArticleSet
 
-  attr_accessor :articles, :filename
+  attr_accessor :articles, :filename, :parse_error_count
 
   def initialize
     @articles = Array.new
@@ -26,16 +26,26 @@ class ArticleSet
   end
   
   def self.from_csv_file(filename)
+    @parse_error_count = 0
     set = ArticleSet.new
     set.filename = filename
-    # load into memory
-    all_rows = CSV.read(set.filename)
+    # read line by line to handle annoying errors better
+    #   http://railsforum.com/viewtopic.php?id=2280
+    error_count = 0
     row_index = 0
-    all_rows.each do |row|
-      if row_index > 0  # first row has titles
-			  set.articles << Article.from_metadata_csv_row(row)
+    input = File.open(filename)
+    input.each do |line|
+      row = CSV::parse_line(line, ',')
+      if row.size == 0
+        @parse_error_count += 1
+      elsif row[0].nil?
+        # skip
+      else
+        if row_index > 0  # first row has titles
+          set.articles << Article.from_metadata_csv_row(row)
+        end
+        row_index += 1
       end
-      row_index += 1
     end
     return set
   end
