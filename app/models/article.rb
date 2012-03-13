@@ -1,6 +1,6 @@
 require 'config/environment'
 require 'hpricot'
-require 'ftools'
+require 'fileutils'
 
 class Article
   attr_accessor :publication_date, :bylines, :dateline, 

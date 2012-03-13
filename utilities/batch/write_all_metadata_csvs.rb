@@ -1,6 +1,7 @@
+$LOAD_PATH << "/Users/civicmac/Development/civic/nytcorpus-ruby"
 require 'config/environment'
 require 'app/models/article'
-require 'ftools'
+require 'fileutils'
 require 'pp'
 require 'csv'
 
@@ -9,7 +10,7 @@ require 'csv'
 # WARNING: this takes a LOOOOOOOOONG time
 
 REALLY_PARSE = true   # for debugging
-DATA_DIR = "data/"
+DATA_DIR = ARGV[1]
 
 csv_dest_dir = ARGV[0]  # something like "analysis/"
 
