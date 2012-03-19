@@ -6,7 +6,7 @@ class Article
   attr_accessor :publication_date, :bylines, :dateline, 
                 :descriptors, :taxonomic_classifiers, :locations,
                 :page, :section, :column, :news_desk, :word_count,
-                :headline, :filename
+                :headline, :filename, :doc
 
   def self.from_xml_file(filename)
     a = Article.new
